@@ -1,83 +1,75 @@
-import dlib
+import numpy as np
 import cv2
 
-line_pairs = [[0, 1], [1, 2], [2, 3], [3, 0],
-              [4, 5], [5, 6], [6, 7], [7, 4],
-              [0, 4], [1, 5], [2, 6], [3, 7]]
+# multiple cascades: https://github.com/Itseez/opencv/tree/master/data/haarcascades
 
+#https://github.com/Itseez/opencv/blob/master/data/haarcascades/haarcascade_frontalface_default.xml
+face_cascade = cv2.CascadeClassifier('Cascades/haarcascade_frontalface_default.xml')
+#https://github.com/Itseez/opencv/blob/master/data/haarcascades/haarcascade_eye.xml
+eye_cascade = cv2.CascadeClassifier('Cascades/haarcascade_eye.xml')
 
-print("[INFO] loading facial landmark predictor...")
-detector = dlib.get_frontal_face_detector()
-predictor = dlib.shape_predictor('./shape_predictor_68_face_landmarks.dat')
+cap = cv2.VideoCapture(0)
 
-print("[INFO] camera sensor warming up...")
-vs = VideoStream(src=0).start()
-(lStart, lEnd) = face_utils.FACIAL_LANDMARKS_IDXS["left_eye"]
-(rStart, rEnd) = face_utils.FACIAL_LANDMARKS_IDXS["right_eye"]
-# vs = VideoStream(usePiCamera=True).start() # Raspberry Pi
-time.sleep(2.0)
+while 1:
+    ret, img = cap.read()
+    img = cv2.flip(img,1)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    faces = face_cascade.detectMultiScale(gray, 1.3, 5)
 
-while True:
-    frame = vs.read()
-    frame = imutils.resize(frame, width=400)
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    rects = detector(gray,0)
+    for (x,y,w,h) in faces:
+        cv2.rectangle(img,(x,y),(x+w,y+h),(0,0,255),2)
+        roi_gray = gray[y:y+h, x:x+w]
+        roi_color = img[y:y+h, x:x+w]
+        
+        eyes = eye_cascade.detectMultiScale(roi_gray)
+        for (ex,ey,ew,eh) in eyes:
+            for i in range(ew/2+1):
+                for j in range(eh/2+1):
+                    
+            cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
 
-    for rect in rects:
-        (bx,by,bw,bh) = face_utils.rect_to_bb(rect)
-        draw_border(frame,(bx,by),(bx+bw,by+bh),(127,255,255),1,10,20)
-
-        shape = predictor(gray,rect)
-
-        shape = face_utils.shape_to_np(shape)
-
-        leftEye = shape[lStart:lEnd]
-
-        rightEye = shape[rStart:rEnd]
-
-
-
-        leftEyeHull = cv2.convexHull(leftEye)
-
-        rightEyeHull = cv2.convexHull(rightEye)
-
-        cv2.drawContours(frame, [leftEyeHull], -1, (127, 255, 255), 1)
-
-        cv2.drawContours(frame, [rightEyeHull], -1, (127, 255, 255), 1)
-
-        reprojectdst, euler_angle = get_head_pose(shape)
-
-        image_points = np.float32([shape[17], shape[21], shape[22], shape[26], shape[36],
-                            shape[39], shape[42], shape[45], shape[31], shape[35],
-                            shape[48], shape[54], shape[57], shape[8]])
-
-        #for start, end in line_pairs:
-            #cv2.line(frame, reprojectdst[start], reprojectdst[end], (0, 0, 255))
-
-        for p in image_points:
-            cv2.circle(frame, (int(p[0]), int(p[1])), 1, (0,0,255), -1)
-
-        #p1 = (int(shape[34][0]), int(shape[34][1]))
-        #p2 = (int(reprojectdst[0][0]), int(reprojectdst[0][1]))
-
-        #cv2.line(frame, p1, p2, (255,0,0), 2)
-
-        cv2.putText(frame, "X: " + "{:7.2f}".format(euler_angle[0, 0]), (20, 20), cv2.FONT_HERSHEY_SIMPLEX,
-                            0.5, (127, 255, 255), thickness=1)
-        cv2.putText(frame, "Y: " + "{:7.2f}".format(euler_angle[1, 0]), (20, 50), cv2.FONT_HERSHEY_SIMPLEX,
-                            0.5, (127, 255, 255), thickness=1)
-        cv2.putText(frame, "Z: " + "{:7.2f}".format(euler_angle[2, 0]), (20, 80), cv2.FONT_HERSHEY_SIMPLEX,
-                            0.5, (127, 255, 255), thickness=1)
-
-        #cv2.putText(frame,"Left Eye Center is:{}".format(tuple(lefteyecenter)),(20,100),cv2.FONT_HERSHEY_SIMPLEX,0.75, (127, 255, 255), thickness=2)
-
-        #cv2.putText(frame,"Left Eye Center is:{}".format(tuple(righteyecenter)),(20,100),cv2.FONT_HERSHEY_SIMPLEX,0.75, (127, 255, 255), thickness=2)
-
-    cv2.imshow("Frame", frame)
-    key = cv2.waitKey(1) & 0xFF
-
-    if key == ord("q"):
+    cv2.imshow('img',img)
+    k = cv2.waitKey(30) & 0xff
+    if k == 27:
         break
 
+cap.release()
 cv2.destroyAllWindows()
-vs.stop()    
+
+
+'''
+gray_eye = eye[min_y: max_y, min_x: max_x]
+_, threshold_eye = cv2.threshold(gray_eye, 70, 255, cv2.THRESH_BINARY)
+height, width = threshold_eye.shape
+left_side_threshold = threshold_eye[0: height, 0: int(width / 2)]
+left_side_white = cv2.countNonZero(left_side_threshold)
+right_side_threshold = threshold_eye[0: height, int(width / 2): width]
+right_side_white = cv2.countNonZero(right_side_threshold)
+
+
+gaze_ratio = left_side_white / right_side_white
+
+
+# Gaze detection
+gaze_ratio_left_eye = get_gaze_ratio([36, 37, 38, 39, 40, 41], landmarks)
+gaze_ratio_right_eye = get_gaze_ratio([42, 43, 44, 45, 46, 47], landmarks)
+gaze_ratio = (gaze_ratio_right_eye + gaze_ratio_left_eye) / 2
+
+
+if gaze_ratio <= 1:
+    cv2.putText(frame, "RIGHT", (50, 100), font, 2, (0, 0, 255), 3)
+    new_frame[:] = (0, 0, 255)
+elif 1 < gaze_ratio < 1.7:
+    cv2.putText(frame, "CENTER", (50, 100), font, 2, (0, 0, 255), 3)
+else:
+    new_frame[:] = (255, 0, 0)
+    cv2.putText(frame, "LEFT", (50, 100), font, 2, (0, 0, 255), 3)
+
+
+
+
+'''
+
+
+
+
