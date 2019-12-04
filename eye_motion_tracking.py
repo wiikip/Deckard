@@ -11,13 +11,12 @@ while 1:
     rows, cols, _ = roi.shape
     gray_roi = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
 
-    gray_roi = cv2.GaussianBlur(gray_roi, (7, 7), 7)
-
-    _, threshold = cv2.threshold(gray_roi, 3, 255, cv2.THRESH_BINARY_INV)
+    rows_droite, cols_droite, _ = roi_droite.shape
+    rows_gauche, cols_gauche, _ = roi_gauche.shape
+    
 
     contours, _ = cv2.findContours( threshold, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-    contours = sorted(contours, key=lambda x: cv2.contourArea(x), reverse=True)
 
     for cnt in contours:
         (x, y, w, h) = cv2.boundingRect(cnt)
