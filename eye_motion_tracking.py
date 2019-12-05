@@ -45,7 +45,10 @@ while 1:
     contours_gauche_sorted = sorted(contours_gauche, key=lambda x: cv2.contourArea(x), reverse=True)
 
 
-    for cnt_d in contours_droite_sorted:
+    if not len(contours_droite_sorted)==0:
+
+        cnt_d=contours_droite_sorted[0]
+
         (x_d, y_d, w_d, h_d) = cv2.boundingRect(cnt_d)
 
         #cv2.drawContours(roi, [cnt], -1, (0, 0, 255), 3)
@@ -54,7 +57,10 @@ while 1:
         cv2.line(roi_droite, (x_d + int(w_d/2), 0), (x_d + int(w_d/2), rows_droite), (0, 255, 0), 2)
         cv2.line(roi_droite, (0, y_d + int(h_d/2)), (cols_droite, y_d + int(h_d/2)), (0, 255, 0), 2)
    
-    for cnt_g in contours_gauche_sorted:
+    if not len(contours_gauche_sorted)==0:
+
+        cnt_g=contours_gauche_sorted[0]
+
         (x_g, y_g, w_g, h_g) = cv2.boundingRect(cnt_g)
         
         #cv2.drawContours(roi, [cnt], -1, (0, 0, 255), 3)
