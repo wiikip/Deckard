@@ -12,6 +12,8 @@ while 1:
     roi_droite = frame[360: 490, 1000: 1170]
     roi_gauche = frame[360:490, 800:960]
 
+    #cv2.imshow("roi_gauche",roi_gauche)
+
     #calcule la taille en pixels de ces cadrages
     rows_droite, cols_droite, _ = roi_droite.shape
     rows_gauche, cols_gauche, _ = roi_gauche.shape
@@ -20,22 +22,28 @@ while 1:
     gray_roi_droite = cv2.cvtColor(roi_droite, cv2.COLOR_BGR2GRAY)
     gray_roi_gauche = cv2.cvtColor(roi_gauche, cv2.COLOR_BGR2GRAY)
 
+
+
     #floute l'image obtenue afin de réduire le bruit
-    blur=7 #mettre nombre impair
+    blur=7 #degré du floutage (mettre nombre impair)
     gray_roi_droite_blurred = cv2.GaussianBlur(gray_roi_droite, (blur,blur), 7)
     gray_roi_gauche_blurred = cv2.GaussianBlur(gray_roi_gauche, (blur, blur), 7)
 
+    """
     #affiche les nouvelles séquences
     cv2.imshow("gray_roi_droite_blurred",gray_roi_droite_blurred)
     cv2.imshow("gray_roi_gauche_blurred",gray_roi_gauche_blurred)
+    """
 
     #sépare la séquence en noir et blanc suivant une certaine limite de nuance de gris
     _, threshold_droite = cv2.threshold(gray_roi_droite_blurred, 3, 255, cv2.THRESH_BINARY_INV)
     _, threshold_gauche = cv2.threshold(gray_roi_gauche_blurred, 3, 255, cv2.THRESH_BINARY_INV)
 
+    """
     #affiche les nouvelles séquences
     cv2.imshow("threshold_droite", threshold_droite)
     cv2.imshow("threshold_gauche",threshold_gauche)
+    """
 
     #renvoie des listes des coordonnées des contours des zones blanches
     contours_droite, _ = cv2.findContours( threshold_droite, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
