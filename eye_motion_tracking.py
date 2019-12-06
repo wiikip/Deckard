@@ -9,9 +9,15 @@ while 1:
     frame = cv2.flip(frame, 0)
 
     #définit la région d'intérêt pour l'oeil droit et gauche
-    roi_droite = frame[360: 490, 1000: 1170]
-    roi_gauche = frame[360:490, 800:960]
+    X_d,Y_d,W_d,H_d=1000,360,170,130
+    X_g,Y_g,W_g,H_g=800,360,170,130
+    
+    roi_droite = frame[Y_d: Y_d+H_d, X_d: X_d+W_d]
+    roi_gauche = frame[Y_g: Y_g+H_g, X_g: X_g+W_g]
 
+    cv2.rectangle(frame, (X_d, Y_d), (X_d + W_d, Y_d + H_d), (255, 0, 0), 2)
+    cv2.rectangle(frame, (X_g, Y_g), (X_g + W_g, Y_g + H_g), (255, 0, 0), 2)
+               
     #cv2.imshow("roi_gauche",roi_gauche)
 
     #calcule la taille en pixels de ces cadrages

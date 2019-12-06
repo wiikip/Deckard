@@ -7,51 +7,35 @@ face_cascade = cv2.CascadeClassifier('Cascades/haarcascade_frontalface_default.x
 eye_cascade = cv2.CascadeClassifier('Cascades/haarcascade_eye.xml')
 
 #source de la vidéo
-cap = cv2.VideoCapture("test_video.MOV")
-
-oeil1_me_regarde,oeil2_me_regarde=False,False
-
+cap = cv2.VideoCapture("test_video.mov")
 
 while 1:
     ret, frame = cap.read()
     frame = cv2.flip(frame, 0)
 
-    #je considère que la personne regarde la caméra lorsque un des 2 yeux la regarde
-    la_personne_me_regarde = oeil1_me_regarde or oeil2_me_regarde
-    
+
     #convertit l'image en 50 nuances de gris
     gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
+    
+    
     #detecte les têtes
     faces = face_cascade.detectMultiScale(gray_frame, 1.3, 5)
 
     if len(faces)!=0:
-
         (x,y,w,h) = faces[0]
+        cv2.rectangle(frame,(x,y),(x+w,y+h),(0,0,255),3)
         
-        
-        if la_personne_me_regarde:
-            cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),3)
-
-        else:
-            cv2.rectangle(frame,(x,y),(x+w,y+h),(0,0,255),3)
-        
-        
-        oeil1_me_regarde,oeil2_me_regarde=False,False
-
         gray_roi = gray_frame[y:y+h, x:x+w]
         color_roi = frame[y:y+h,x:x+w]
         
         eyes = eye_cascade.detectMultiScale(gray_roi)
         eyes_sorted=sorted(eyes, key= lambda x:x[3]*x[2],reverse=True)
 
+        #le compteur sert à ne prendre en compte que les deux premiers objets détectés comme des yeux 
         i=0
         for (ex,ey,ew,eh) in eyes_sorted:
-            
             #cv2.rectangle(color_roi,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
             
-
-
             #définit la région d'intérêt pour un oeil
             eye_gray_roi = gray_roi[ey: ey+eh, ex:ex+ew]
             eye_color_roi = color_roi[ey:ey+eh,ex:ex+ew]
@@ -80,16 +64,9 @@ while 1:
 
                 (x, y, w, h) = cv2.boundingRect(cnt)
 
-                abscisse_du_centre=x+int(w/2)
-                ordonnee_du_centre=y+int(h/2)
-                #problème de coordonnées
-                if i==0:
-                    oeil1_me_regarde=(ex<abscisse_du_centre<ex+ew) and (ey<ordonnee_du_centre<ey+eh)
-                    print(oeil1_me_regarde)
-                else:
-                    oeil2_me_regarde=(ex<abscisse_du_centre<ex+ew) and (ey<ordonnee_du_centre<ey+eh)
-
-
+                cv2.line(eye_color_roi, (x + int(w/2), 0), (x + int(w/2), rows), (0, 255, 0), 2)
+                cv2.line(eye_color_roi, (0, y + int(h/2)), (cols, y + int(h/2)), (0, 255, 0), 2)
+            
             i+=1
             if i>=2:
                 break
