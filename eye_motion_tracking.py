@@ -37,14 +37,15 @@ while 1:
     cv2.imshow("threshold_droite", threshold_droite)
     cv2.imshow("threshold_gauche",threshold_gauche)
 
-    #renvoie les contours des zones blanches
+    #renvoie des listes des coordonnées des contours des zones blanches
     contours_droite, _ = cv2.findContours( threshold_droite, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     contours_gauche, _ = cv2.findContours( threshold_gauche, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     
+    #trie ses listes afin d'avoir le plus grand contour en premier élément
     contours_droite_sorted = sorted(contours_droite, key=lambda x: cv2.contourArea(x), reverse=True)
     contours_gauche_sorted = sorted(contours_gauche, key=lambda x: cv2.contourArea(x), reverse=True)
 
-
+    #si un contour a été détecté, on renvoie la liste du plus grand contour
     if not len(contours_droite_sorted)==0:
 
         cnt_d=contours_droite_sorted[0]
@@ -57,6 +58,7 @@ while 1:
         cv2.line(roi_droite, (x_d + int(w_d/2), 0), (x_d + int(w_d/2), rows_droite), (0, 255, 0), 2)
         cv2.line(roi_droite, (0, y_d + int(h_d/2)), (cols_droite, y_d + int(h_d/2)), (0, 255, 0), 2)
    
+    #si un contour a été détecté, on renvoie la liste du plus grand contour
     if not len(contours_gauche_sorted)==0:
 
         cnt_g=contours_gauche_sorted[0]
@@ -70,8 +72,10 @@ while 1:
         cv2.line(roi_gauche, (0, y_g + int(h_g/2)), (cols_gauche, y_g + int(h_g/2)), (0, 255, 0), 2)
 
 
-    cv2.imshow('roi_droite',roi_droite)
-    cv2.imshow('roi_gauche',roi_gauche)
+    #cv2.imshow('roi_droite',roi_droite)
+    #cv2.imshow('roi_gauche',roi_gauche)
+
+    cv2.imshow('frame',frame)
 
     k = cv2.waitKey(30) & 0xff
     if k == 27:
