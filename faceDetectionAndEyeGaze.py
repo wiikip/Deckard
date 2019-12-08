@@ -84,8 +84,10 @@ while 1:
                 ordonnee_du_centre=y+int(h/2)
                 #problème de coordonnées
                 if i==0:
+                    
                     oeil1_me_regarde=(ex<abscisse_du_centre<ex+ew) and (ey<ordonnee_du_centre<ey+eh)
                     print(oeil1_me_regarde)
+                
                 else:
                     oeil2_me_regarde=(ex<abscisse_du_centre<ex+ew) and (ey<ordonnee_du_centre<ey+eh)
 

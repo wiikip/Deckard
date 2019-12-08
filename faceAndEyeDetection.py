@@ -8,11 +8,11 @@ face_cascade = cv2.CascadeClassifier('Cascades/haarcascade_frontalface_default.x
 #https://github.com/Itseez/opencv/blob/master/data/haarcascades/haarcascade_eye.xml
 eye_cascade = cv2.CascadeClassifier('Cascades/haarcascade_eye.xml')
 
-cap = cv2.VideoCapture("test_video.mov")
+cap = cv2.VideoCapture(0)
 
 while 1:
     ret, img = cap.read()
-    img = cv2.flip(img,0)
+    img = cv2.flip(img,1)
 
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     
