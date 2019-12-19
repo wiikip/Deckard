@@ -45,7 +45,7 @@ while 1:
         eyes = eye_cascade.detectMultiScale(gray_roi)
         eyes_sorted=sorted(eyes, key= lambda x:x[3]*x[2],reverse=True)
 
-        i=0
+        compteur_yeux=0
         for (ex,ey,ew,eh) in eyes_sorted:
             
             #cv2.rectangle(color_roi,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
@@ -66,7 +66,7 @@ while 1:
 
             #sépare la séquence en noir et blanc suivant une certaine limite de nuance de gris
             _, threshold = cv2.threshold(eye_gray_roi, 3, 255, cv2.THRESH_BINARY_INV)
-
+            
             #renvoie des listes des coordonnées des contours des zones blanches
             contours, _ = cv2.findContours( threshold, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
             
@@ -83,7 +83,7 @@ while 1:
                 abscisse_du_centre=x+int(w/2)
                 ordonnee_du_centre=y+int(h/2)
                 #problème de coordonnées
-                if i==0:
+                if compteur_yeux==0:
                     
                     oeil1_me_regarde=(ex<abscisse_du_centre<ex+ew) and (ey<ordonnee_du_centre<ey+eh)
                     print(oeil1_me_regarde)
@@ -92,8 +92,8 @@ while 1:
                     oeil2_me_regarde=(ex<abscisse_du_centre<ex+ew) and (ey<ordonnee_du_centre<ey+eh)
 
 
-            i+=1
-            if i>=2:
+            compteur_yeux+=1
+            if compteur_yeux>=2:
                 break
     
             
