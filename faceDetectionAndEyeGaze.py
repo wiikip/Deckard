@@ -75,10 +75,13 @@ while 1:
 
             #si un contour a été détecté, on renvoie la liste du plus grand contour
             if len(contours_sorted)!=0:
-
+                
                 cnt=contours_sorted[0]
-
+                
                 (x, y, w, h) = cv2.boundingRect(cnt)
+                cv2.rectangle(eye_color_roi,(x,y),(x+w,y+h),(0,255,0),2)
+
+
 
                 abscisse_du_centre=x+int(w/2)
                 ordonnee_du_centre=y+int(h/2)
@@ -86,7 +89,7 @@ while 1:
                 if compteur_yeux==0:
                     
                     oeil1_me_regarde=(ex<abscisse_du_centre<ex+ew) and (ey<ordonnee_du_centre<ey+eh)
-                    print(oeil1_me_regarde)
+                    #print(oeil1_me_regarde)
                     
                 else:
                     oeil2_me_regarde=(ex<abscisse_du_centre<ex+ew) and (ey<ordonnee_du_centre<ey+eh)
@@ -95,7 +98,6 @@ while 1:
             compteur_yeux+=1
             if compteur_yeux>=2:
                 break
-    
             
                 
         cv2.imshow("frame",frame)
