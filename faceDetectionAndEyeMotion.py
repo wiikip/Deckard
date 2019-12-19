@@ -35,7 +35,7 @@ while 1:
         i=0
         for (ex,ey,ew,eh) in eyes_sorted:
             #cv2.rectangle(color_roi,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
-            
+            cv2.rectangle(color_roi,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
             #définit la région d'intérêt pour un oeil
             eye_gray_roi = gray_roi[ey: ey+eh, ex:ex+ew]
             eye_color_roi = color_roi[ey:ey+eh,ex:ex+ew]
