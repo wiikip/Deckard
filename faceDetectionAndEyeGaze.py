@@ -24,7 +24,7 @@ while 1:
 
     #detecte les têtes
     faces = face_cascade.detectMultiScale(gray_frame, 1.3, 5)
-
+    #trier les têtes
     if len(faces)!=0:
 
         (x,y,w,h) = faces[0]
@@ -37,7 +37,7 @@ while 1:
             cv2.rectangle(frame,(x,y),(x+w,y+h),(0,0,255),3)
         
         
-        oeil1_me_regarde,oeil2_me_regarde=False,False
+        #oeil1_me_regarde,oeil2_me_regarde=False,False
 
         gray_roi = gray_frame[y:y+h, x:x+w]
         color_roi = frame[y:y+h,x:x+w]
@@ -74,7 +74,7 @@ while 1:
             contours_sorted = sorted(contours, key=lambda x: cv2.contourArea(x), reverse=True)
 
             #si un contour a été détecté, on renvoie la liste du plus grand contour
-            if not len(contours_sorted)==0:
+            if len(contours_sorted)!=0:
 
                 cnt=contours_sorted[0]
 
@@ -87,7 +87,7 @@ while 1:
                     
                     oeil1_me_regarde=(ex<abscisse_du_centre<ex+ew) and (ey<ordonnee_du_centre<ey+eh)
                     print(oeil1_me_regarde)
-                
+                    
                 else:
                     oeil2_me_regarde=(ex<abscisse_du_centre<ex+ew) and (ey<ordonnee_du_centre<ey+eh)
 
