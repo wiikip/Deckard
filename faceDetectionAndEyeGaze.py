@@ -87,8 +87,9 @@ while 1:
                 #problème de coordonnées
                 if compteur_yeux==0:
                     
-                    oeil1_me_regarde=(ex<abscisse_du_centre<ex+ew) and (ey<ordonnee_du_centre<ey+eh)
-                    #print(oeil1_me_regarde)
+                    #oeil1_me_regarde=(x+ex<abscisse_du_centre<x+ex+ew) and (y+ey<ordonnee_du_centre<y+ey+eh)
+                    #print(x,ex,cx)
+                    print(oeil1_me_regarde)
                         
                 else:
                     oeil2_me_regarde=(ex<abscisse_du_centre<ex+ew) and (ey<ordonnee_du_centre<ey+eh)
