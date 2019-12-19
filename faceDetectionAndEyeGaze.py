@@ -7,17 +7,18 @@ face_cascade = cv2.CascadeClassifier('Cascades/haarcascade_frontalface_default.x
 eye_cascade = cv2.CascadeClassifier('Cascades/haarcascade_eye.xml')
 
 #source de la vidéo
-cap = cv2.VideoCapture("test_video.MOV")
+#cap = cv2.VideoCapture("test_video.MOV")
+cap = cv2.VideoCapture(0)
 
 oeil1_me_regarde,oeil2_me_regarde=False,False
 
 
 while 1:
     ret, frame = cap.read()
-    frame = cv2.flip(frame, 0)
+    frame = cv2.flip(frame, 1)
 
     #je considère que la personne regarde la caméra lorsque un des 2 yeux la regarde
-    la_personne_me_regarde = oeil1_me_regarde or oeil2_me_regarde
+    la_personne_me_regarde = oeil1_me_regarde and oeil2_me_regarde
     
     #convertit l'image en 50 nuances de gris
     gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -93,7 +94,7 @@ while 1:
                     oeil1_me_regarde=(24*pas_x<abscisse_du_centre<ew-24*pas_x) and (24*pas_y<ordonnee_du_centre<eh-24*pas_y)
                         
                 else:
-                    oeil2_me_regarde=(ex<abscisse_du_centre<ex+ew) and (ey<ordonnee_du_centre<ey+eh)
+                    oeil2_me_regarde= (24*pas_x<abscisse_du_centre<ew-24*pas_x) and (24*pas_y<ordonnee_du_centre<eh-24*pas_y)
 
 
             compteur_yeux+=1
