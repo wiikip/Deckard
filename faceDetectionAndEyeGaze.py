@@ -48,7 +48,7 @@ while 1:
         compteur_yeux=0
         for (ex,ey,ew,eh) in eyes_sorted:
             
-            #cv2.rectangle(color_roi,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
+            cv2.rectangle(color_roi,(ex,ey),(ex+ew,ey+eh),(255,0,0),2)
             
 
 
@@ -84,12 +84,13 @@ while 1:
 
                 abscisse_du_centre=cx+int(cw/2)
                 ordonnee_du_centre=cy+int(ch/2)
+                pas_x = int(ew/50) 
+                pas_y = int(eh/50)
+
                 #problème de coordonnées
                 if compteur_yeux==0:
                     
-                    #oeil1_me_regarde=(x+ex<abscisse_du_centre<x+ex+ew) and (y+ey<ordonnee_du_centre<y+ey+eh)
-                    #print(x,ex,cx)
-                    print(oeil1_me_regarde)
+                    oeil1_me_regarde=(24*pas_x<abscisse_du_centre<ew-24*pas_x) and (24*pas_y<ordonnee_du_centre<eh-24*pas_y)
                         
                 else:
                     oeil2_me_regarde=(ex<abscisse_du_centre<ex+ew) and (ey<ordonnee_du_centre<ey+eh)

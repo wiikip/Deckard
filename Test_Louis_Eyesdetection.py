@@ -25,7 +25,7 @@ while 1:
         for (ex,ey,ew,eh) in eyes:
             for i in range(ew/2+1):
                 for j in range(eh/2+1):
-                    
+
             cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
 
     cv2.imshow('img',img)
