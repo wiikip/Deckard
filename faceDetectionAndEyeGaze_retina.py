@@ -66,7 +66,7 @@ while 1:
 
 
             #sépare la séquence en noir et blanc suivant une certaine limite de nuance de gris
-            _, threshold = cv2.threshold(eye_gray_roi, 3, 255, cv2.THRESH_BINARY_INV)
+            _, threshold = cv2.threshold(eye_gray_roi, 35, 255, cv2.THRESH_BINARY_INV)
             
             #renvoie des listes des coordonnées des contours des zones blanches
             contours, _ = cv2.findContours( threshold, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
