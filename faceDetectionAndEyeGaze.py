@@ -78,19 +78,18 @@ while 1:
                 
                 cnt=contours_sorted[0]
                 
-                (x, y, w, h) = cv2.boundingRect(cnt)
-                cv2.rectangle(eye_color_roi,(x,y),(x+w,y+h),(0,255,0),2)
+                (cx, cy, cw, ch) = cv2.boundingRect(cnt)
+                cv2.rectangle(eye_color_roi,(cx,cy),(cx+cw,cy+ch),(255,0,0),2)
 
 
-
-                abscisse_du_centre=x+int(w/2)
-                ordonnee_du_centre=y+int(h/2)
+                abscisse_du_centre=cx+int(cw/2)
+                ordonnee_du_centre=cy+int(ch/2)
                 #problème de coordonnées
                 if compteur_yeux==0:
                     
                     oeil1_me_regarde=(ex<abscisse_du_centre<ex+ew) and (ey<ordonnee_du_centre<ey+eh)
                     #print(oeil1_me_regarde)
-                    
+                        
                 else:
                     oeil2_me_regarde=(ex<abscisse_du_centre<ex+ew) and (ey<ordonnee_du_centre<ey+eh)
 
