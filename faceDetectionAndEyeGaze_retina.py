@@ -19,7 +19,7 @@ while 1:
     frame = cv2.flip(frame, 1)
 
     # je considère que la personne regarde la caméra lorsque un des 2 yeux la regarde
-    personGazes = firstEyeGazes or secondEyeGazes
+    personGazes = firstEyeGazes and secondEyeGazes
 
     # convertit l'image en 50 nuances de gris
     grayFrame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -81,8 +81,6 @@ while 1:
                 outlineBis = outlineSorted[0]
 
                 (cx, cy, cw, ch) = cv2.boundingRect(outlineBis)
-                cv2.rectangle(eyeColorRoi, (cx, cy),
-                              (cx+cw, cy+ch), (255, 0, 0), 2)
 
                 abscisse_du_centre = cx+int(cw/2)
                 ordonnee_du_centre = cy+int(ch/2)
@@ -92,12 +90,12 @@ while 1:
                 # problème de coordonnées
                 if eyeCounter == 0:
 
-                    firstEyeGazes = (24*pas_x < abscisse_du_centre < ew-24 *
-                                     pas_x) and (24*pas_y < ordonnee_du_centre < eh-24*pas_y)
+                    firstEyeGazes = (23*pas_x < abscisse_du_centre < ew-23 *
+                                     pas_x) and (23*pas_y < ordonnee_du_centre < eh-23*pas_y)
 
                 else:
-                    secondEyeGazes = (24*pas_x < abscisse_du_centre < ew-24 *
-                                      pas_x) and (24*pas_y < ordonnee_du_centre < eh-24*pas_y)
+                    secondEyeGazes = (23*pas_x < abscisse_du_centre < ew-23 *
+                                      pas_x) and (23*pas_y < ordonnee_du_centre < eh-23*pas_y)
 
             eyeCounter += 1
             if eyeCounter >= 2:
