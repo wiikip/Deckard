@@ -3,7 +3,6 @@ import cv2
 import numpy as np
 import pickle
 
-
 video_capture = cv2.VideoCapture(0)
 
 with open('dataset_faces.dat', 'rb') as f:
